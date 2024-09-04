@@ -14,7 +14,6 @@ web.get('/player/login/dashboard', (req, res) => {
     console.log(req.headers)
 });
 web.get('/cache/*', (req, res) => {
-    console.log(req.url.replace(/\//g, "\\"));
     let target = cache[req.url.replace(/\//g, "\\")];
     if (target) {
         res.set('Content-Type', 'text/html')
@@ -24,6 +23,9 @@ web.get('/cache/*', (req, res) => {
     if (cnf.website.auto_redirect.status) res.redirect(cnf.website.auto_redirect.url+req.url);
     else target = randomInt(99, 599), res.sendStatus(target == 200 ? 400 : target);
 });
+web.get("/*", (req, res) => {
+    console.log(req.url.replace(/\//g, "\\"));
+})
 
 
 module.exports = web;

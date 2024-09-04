@@ -1,6 +1,6 @@
 {
     "website": {
-        "server": [[443, "HTTPS"], [80, "HTTP"]],
+        "server": [[2000, "HTTPS"], [2001, "HTTP"]],
         "log": {
             "req": true
         },
