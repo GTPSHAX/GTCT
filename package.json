@@ -1,0 +1,28 @@
+{
+  "name": "gtct",
+  "version": "1.0.0",
+  "description": "Growtopia Cache Transfer",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "gtct",
+    "http",
+    "https",
+    "gtps",
+    "growtopia",
+    "growtopia",
+    "private",
+    "server",
+    "cache",
+    "gtpshax",
+    "growplus"
+  ],
+  "author": "GrowPlus Community",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

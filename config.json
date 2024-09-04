@@ -1,0 +1,15 @@
+{
+    "website": {
+        "server": [[443, "HTTPS"], [80, "HTTP"]],
+        "log": {
+            "req": true
+        },
+        "auto_redirect": {
+            "status": false,
+            "url": "https://ubistatic-a.akamaihd.net/0098/83407701"
+        }
+    },
+    "path": {
+        "cache": "./website/cache"
+    }
+}
