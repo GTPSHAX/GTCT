@@ -16,11 +16,11 @@ const cert = {
 print.info("Loading handler request...");
 const web = require("./handler/request");
 
-cnf.website.server.forEach(async port => {
+cnf.server.ports.forEach(async port => {
     print.info("Starting "+port[1]+" server with port: " + port[0])
-    if (port[1] == "HTTPS") {
-        https.createServer(cert, web).listen(cnf.website.securePort, () => {
-            print.success('Secure server running at https://localhost:443/');
+    if (port[1].toUpperCase() == "HTTPS") {
+        https.createServer(cert, web).listen(port[0], () => {
+            print.success('Secure server running at https://localhost:'+port[0]+'/');
         });
     }
     else {

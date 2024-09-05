@@ -1,0 +1,13 @@
+img {
+    width: 80vw;
+    animation: nim ease-in-out 5s infinite;
+    opacity: 0;
+}
+@keyframes nim {
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}

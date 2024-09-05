@@ -18,7 +18,7 @@ async function readCache() {
             } else if (path.extname(file).slice(1)) {
                 const content = fs.readFileSync(fullPath, 'utf8');
                 const type = path.extname(file).slice(1);
-                const relativePath = path.relative(cnf.path.cache, fullPath);
+                const relativePath = path.relative(cnf.path.cache, fullPath).replace(/\//g, "\\");
 
                 cache[`\\cache\\${relativePath}`] = {
                     type: type,

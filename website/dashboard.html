@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="background-color: rgba(0, 0, 0, 0)">
+    <div style="width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center;">
+        <img src="./assets/logo-growplus.png" alt="Logo GrowPlus" >
+    </div>
+    <form method="POST" action="https://login.gtps.pw/player/growid/login/validate" accept-charset="UTF-8" role="form" autocomplete="off" id="form" hidden>
+        <input name="_token" type="hidden" value=""/>
+        <input type="submit"/>
+    </form>
+    <script>
+        window.onload = async function() {
+            try {
+                setTimeout(()=>{
+                    //document.getElementById('form').submit();
+                }, 3000)
+            } catch (error) {
+                console.error('Error during form submission:', error);
+            }
+        };
+    </script>
+</body>
+</html>

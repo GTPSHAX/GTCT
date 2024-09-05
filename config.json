@@ -1,12 +1,22 @@
 {
-    "website": {
-        "server": [[2000, "HTTPS"], [2001, "HTTP"]],
-        "log": {
-            "req": true
+    "addon": {
+        "auto_redirect": "https://ubistatic-a.akamaihd.net/0098/83407701"
+    },
+    "server": {
+        "ports": [[2000, "HTTPS"], [2001, "HTTP"]],
+        "logs": {
+            "request": true
         },
-        "auto_redirect": {
-            "status": false,
-            "url": "https://ubistatic-a.akamaihd.net/0098/83407701"
+        "security": {
+            "only_growtopia_request": true
+        },
+        "server_data": {
+            "ip": "auto",
+            "port": 5555,
+            "type": 1,
+            "loginUrl": "login.gtps.pw",
+            "maint": "Failed login, please contact discord Alukard A.K.A GTPSHAX",
+            "meta": "GrowPlus"
         }
     },
     "path": {
