@@ -18,5 +18,5 @@ Growtopia Cache Transfer (GTCT) is a web server built with Node.js, dedicated to
 **Note:** _Ensure you have already opened the necessary ports before running the program._
 
 ## Credits
-- tron-ghx
 - YoruAkio
+- tron-ghx
