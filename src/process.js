@@ -31,7 +31,9 @@ async function readCache() {
     readDirRecursive(cnf.path.cache);
 
     print.info(`${Object.keys(cache).length} Cache Loaded`);
-    console.log(cache);
+  
+
+    
     
     return cache;
 }
