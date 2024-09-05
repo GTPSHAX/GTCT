@@ -17,6 +17,7 @@ web.get('/growtopia/*', (req, res) => {
     print.info(`[${req.ip}] Connected with : ${req.url}`)
     switch (req.url) {
         case "/growtopia/server_data.php":
+            res.sendStatus(200);
             const content = `server|${cnf.server.server_data.ip.toUpperCase() == "AUTO" ? axios.get("https://api.ipify.org?format=json").data.ip : cnf.server.server_data.ip}
 port|${cnf.server.server_data.port}
 type|${cnf.server.server_data.type}
@@ -35,6 +36,7 @@ web.get('/player/*', (req, res) => {
     print.info(`[CLIENT] Login ${req.url} With IP : ${req.ip}`)
     switch (req.url) {
         case "/player/login/dashboard":
+            res.sendStatus(200);
             res.sendFile("../website/dashboard.html");
             break;
     
@@ -48,11 +50,13 @@ web.post('/player/growid/login/validate', (req, res) => {
         `_token=${req.body._token}&growId=GROWPLUS&password=GROWPLUS`,
     ).toString('base64');
 
+    res.sendStatus(200);
     res.send(
         `{"status":"success","message":"Account Validated.","token":"${token}","url":"","accountType":"growtopia"}`,
     );
 });
 web.post('/player/validate/close', function (req, res) {
+    res.sendStatus(200);
     res.send('<script>window.close();</script>');
 });
 
@@ -64,6 +68,7 @@ web.get('/cache/*', (req, res) => {
         let target = cache[req.url.replace(/\//g, "\\")];
         if (!target) throw new Error("Missing RTTEX");
         
+        res.sendStatus(200);
         res.set('Content-Type', target.type)
         res.send(Buffer.from(target.content))
     } catch (error) {
@@ -73,12 +78,16 @@ web.get('/cache/*', (req, res) => {
         else res.sendStatus(404);
     }
 });
-// web.get("*", (req, res) => {
-//     if (!allowed.host.includes(req.headers.host) && cnf.server.security.only_growtopia_request)
-//         res.sendStatus(404);
-//     else if (cnf.server.logs.request)
-//         print.info(`[${req.ip}] Request to: ${req.url}`)
-// });
+web.get("*", (req, res) => {
+    if (!allowed.host.includes(req.headers.host) && cnf.server.security.only_growtopia_request) {
+        res.sendStatus(404);
+        return;
+    }
+    else if (cnf.server.logs.request)
+        print.info(`[${req.ip}] Request to: ${req.url}`);
+    res.sendStatus(200);
+    res.send("Growtopia Cache Transfer (GTCT) © GrowPlus Community - 2024");
+});
 
 
 module.exports = web;
