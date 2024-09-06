@@ -1,4 +1,4 @@
-const https = require('https');
+const https = require('https'), http = require("http");
 const fs = require("fs");
 
 const print = require("./plugins/print");
@@ -24,7 +24,7 @@ cnf.server.ports.forEach(async port => {
         });
     }
     else {
-        web.listen(port[0], "0.0.0.0", () => {
+        http.createServer(web).listen(port[0], "0.0.0.0", () => {
             print.success('Server running at http://localhost:'+port[0]+'/');
         })
     }
