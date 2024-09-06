@@ -4,7 +4,6 @@
   "description": "Growtopia Cache Transfer",
   "main": "./src/app.js",
   "scripts": {
-    "build": "node ./src/app.js",
     "start": "node ./src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
