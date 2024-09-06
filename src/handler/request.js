@@ -3,7 +3,6 @@ const web = express();
 const cnf = require("../../config.json");
 const print = require("../plugins/print");
 const axios = require("axios");
-const pros = require("../process");
 const path = require("path");
 const bodyParser = require('body-parser');
 const allowed = {
@@ -21,7 +20,7 @@ web.use(function (req, res, next) {
 web.use(bodyParser.urlencoded({ extended: true }));
 
 // Login section
-web.get('/growtopia/*', async (req, res) => {
+web.post('/growtopia/*', async (req, res) => {
     print.info(`[${req.ip}] Connected with : ${req.url}`)
     switch (req.url) {
         case "/growtopia/server_data.php":
@@ -29,8 +28,17 @@ web.get('/growtopia/*', async (req, res) => {
             const content = `server|${cnf.server.server_data.ip.toUpperCase() == "AUTO" ? server.data.ip : cnf.server.server_data?.ip}
 port|${cnf.server.server_data.port}
 type|${cnf.server.server_data.type}
-loginurl|${cnf.server.server_data.loginUrl}
 #maint|${cnf.server.server_data.maint}
+beta_server|${cnf.server.server_data.beta.server}
+beta_port|${cnf.server.server_data.beta.port}
+beta_type|${cnf.server.server_data.beta.type}
+beta2_server|${cnf.server.server_data.beta2.server}
+beta2_port|${cnf.server.server_data.beta2.port}
+beta2_type|${cnf.server.server_data.beta2.type}
+beta3_server|${cnf.server.server_data.beta3.server}
+beta3_port|${cnf.server.server_data.beta3.port}
+beta3_type|${cnf.server.server_data.beta3.type}
+loginurl|${cnf.server.server_data.loginUrl}
 meta|${cnf.server.server_data.meta}
 RTENDMARKERBS1001`;
             res.send(content);
@@ -41,17 +49,23 @@ RTENDMARKERBS1001`;
             break;
     }
 });
-web.get('/player/login/*', (req, res) => {
-    if (req.url == "/player/login/dashboard") res.sendFile(path.resolve(__dirname, "../../website/index.html")), print.info(`[CLIENT] Login ${req.url} With IP : ${req.ip}`);
-    else {
-        try {
-            res.sendFile(path.resolve(__dirname, "../../website/"+req.url.split("login/")[1]));
-        } catch (error) {
-            print.error(error);
-            res.sendStatus(404);
-        }
+web.post('/player/login/dashboard', (req, res) => {
+    try {
+        res.sendFile(path.resolve(__dirname, "../../website/index.html"));
+        print.info(`[CLIENT] Login ${req.url} With IP : ${req.ip}`);
+    } catch (error) {
+        print.error(error);
+        res.sendStatus(404);
     }
 });
+web.get("/public/*", (req, res)=>{
+    try {
+        res.sendFile(path.resolve(__dirname, "../../website/"+req.url.split("public/")[1]));
+    } catch (error) {
+        print.error(error);
+        res.sendStatus(404);
+    }
+})
 web.post('/player/growid/login/validate', (req, res) => {
     try {
         const token = Buffer.from(
@@ -59,7 +73,7 @@ web.post('/player/growid/login/validate', (req, res) => {
         ).toString('base64');
     
         res.send(
-            `{"status":"success","message":"Account Validated.","token":"${token}","url":"","accountType":"growtopia"}`,
+            `{"status":"success","message":"Account Validated.","token":"${cnf.server.returnToken ? token : ""}","url":"","accountType":"growtopia"}`,
         );
     } catch (error) {
         print.error(error);

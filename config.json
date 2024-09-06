@@ -4,21 +4,37 @@
     },
     "server": {
         "ports": [[443, "HTTPS"],[80, "HTTP"]],
+        "returnToken": false,
         "logs": {
             "request": true,
             "missing_rttex": true,
             "sending_rttex": true
         },
         "security": {
-            "only_growtopia_request": false
+            "only_growtopia_request": true
         },
         "server_data": {
             "ip": "auto",
             "port": 5555,
             "type": 1,
-            "loginUrl": "login.gtps.pw",
+            "loginUrl": "gtps.pw",
             "maint": "Failed login, please contact discord Alukard A.K.A GTPSHAX",
-            "meta": "GrowPlus"
+            "meta": "GrowPlus",
+            "beta": {
+                "server": "gtps.pw",
+                "port": 28028,
+                "type": 1
+            },
+            "beta2": {
+                "server": "gtps.pw",
+                "port": 28028,
+                "type": 1
+            },
+            "beta3": {
+                "server": "gtps.pw",
+                "port": 28028,
+                "type": 1
+            }
         }
     },
     "path": {
