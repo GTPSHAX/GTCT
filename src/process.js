@@ -20,7 +20,7 @@ async function readCache() {
                 const type = path.extname(file).slice(1);
                 const relativePath = path.relative(cnf.path.cache, fullPath).replace(/\//g, "\\");
 
-                cache[`\\cache\\${relativePath}`] = {
+                cache[`/cache/${relativePath.replace(/\\/g, "/")}`] = {
                     type: type,
                     content: content
                 };
@@ -31,10 +31,6 @@ async function readCache() {
     readDirRecursive(cnf.path.cache);
 
     print.info(`${Object.keys(cache).length} Cache Loaded`);
-  
-
-    
-    
     return cache;
 }
 

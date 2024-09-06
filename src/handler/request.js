@@ -5,6 +5,11 @@ const print = require("../plugins/print");
 const axios = require("axios");
 const path = require("path");
 const bodyParser = require('body-parser');
+const pros = require("../process");
+let cache;
+(async()=>{
+    cache = await pros.readCache();
+})();
 const allowed = {
     host: ["www.growtopia1.com", "www.growtopia2.com", "growtopia1.com", "growtopia2.com"]
 };
@@ -85,6 +90,23 @@ web.post('/player/validate/close', function (req, res) {
 });
 
 // Cache Section
+web.get("/cache/*", (req, res) => {
+    try {
+        const data = cache[req.url];
+        if (!data) {
+            print.error(`[${req.ip}] Missing RTTEX: ${req.url}`);
+            if (cnf.addon.auto_redirect) res.redirect(cnf.addon.auto_redirect + req.url);
+            else res.sendStatus(404);
+            return;
+        }
+        if (cnf.server.logs.sending_rttex) print.info(`[${req.ip}] Sending RTTEX: ${req.url}`);
+        //res.send(data.content);
+        res.sendFile(path.resolve(__dirname, "../../website"+req.url))
+    } catch (error) {
+        print.error(error);
+        res.sendStatus(404);
+    }
+});
 web.use(express.static(path.resolve (__dirname, "../../website")));
 
 web.get("*", (req, res) => {

@@ -38,6 +38,6 @@
         }
     },
     "path": {
-        "cache": "./cache"
+        "cache": "./website/cache"
     }
 }
