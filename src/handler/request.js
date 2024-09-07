@@ -99,14 +99,24 @@ web.post('/player/validate/close', function (req, res) {
 // Cache Section
 web.get("/cache/*", (req, res) => {
     try {
-        if (fs.existsSync(path.resolve(__dirname, "../../website"+req.url))) {
+        if (!fs.existsSync(path.resolve(__dirname, "../../website"+req.url))) {
             print.error(`[${req.ip}] Missing RTTEX: ${req.url}`);
             if (cnf.addon.auto_redirect) res.redirect(cnf.addon.auto_redirect + req.url);
             else res.sendStatus(404);
             return;
         }
         if (cnf.server.logs.sending_rttex) print.info(`[${req.ip}] Sending RTTEX: ${req.url}`);
-        res.sendFile(path.resolve(__dirname, "../../website"+req.url))
+
+        res.setHeader('Content-Disposition', 'attachment; filename=' + req.url.split("/")[req.url.split("/").length - 1]);
+        res.setHeader('Content-Type', 'application/zip');
+        const fileStream = fs.createReadStream(path.resolve(__dirname, "../../website"+req.url));
+        fileStream.pipe(res);
+        fileStream.on('error', (err) => {
+            console.error('Error streaming file:', err);
+            res.status(500).send('File download failed');
+        });
+
+        //res.sendFile(path.resolve(__dirname, "../../website"+req.url))
     } catch (error) {
         print.error(error);
         res.sendStatus(404);
