@@ -26,8 +26,19 @@ web.post('/growtopia/*', async (req, res) => {
     switch (req.url) {
         case "/growtopia/server_data.php":
             const server = await axios.get("https://api.ipify.org?format=json");
-            const content = `server|${cnf.server.server_data.ip.toUpperCase() == "AUTO" ? server.data.ip : cnf.server.server_data?.ip}
-port|${cnf.server.server_data.port}
+            let ip = (cnf.server.server_data.ip.toUpperCase() == "AUTO" ? server.data.ip : cnf.server.server_data?.ip);
+            let port = cnf.server.server_data.port;
+
+            cnf.addon.redirect.forEach(client => {
+                if (req.ip == client.ClientIP) {
+                    ip = (client.ENetIP.toUpperCase() == "AUTO" ? server.data.ip : client.ENetIP);
+                    port = client.ENetPort;
+                    print.info(`[${req.ip}] Redirect to ENetIP: ${ip}, ENetPort: ${port}`);
+                }
+            });
+
+            const content = `server|${ip}
+port|${port}
 type|${cnf.server.server_data.type}
 #maint|${cnf.server.server_data.maint}
 beta_server|${cnf.server.server_data.beta.server}
@@ -60,13 +71,6 @@ web.post('/player/login/dashboard', (req, res) => {
     }
 });
 web.get("/public/*", (req, res)=>{
-    if (!allowed.host.includes(req.headers.host) && cnf.server.security.only_growtopia_request) {
-        res.sendStatus(404);
-        return;
-    }
-    else if (cnf.server.logs.request)
-        print.info(`[${req.ip}] Request to: ${req.url}`);
-    
     try {
         res.sendFile(path.resolve(__dirname, "../../website/"+req.url.split("public/")[1]));
     } catch (error) {
@@ -75,13 +79,6 @@ web.get("/public/*", (req, res)=>{
     }
 })
 web.post('/player/growid/login/validate', (req, res) => {
-    if (!allowed.host.includes(req.headers.host) && cnf.server.security.only_growtopia_request) {
-        res.sendStatus(404);
-        return;
-    }
-    else if (cnf.server.logs.request)
-        print.info(`[${req.ip}] Request to: ${req.url}`);
-
     try {
         const token = Buffer.from(
             `_token=${req.body._token}&growId=GROWPLUS&password=GROWPLUS`,
@@ -96,25 +93,11 @@ web.post('/player/growid/login/validate', (req, res) => {
     }
 });
 web.post('/player/validate/close', function (req, res) {
-    if (!allowed.host.includes(req.headers.host) && cnf.server.security.only_growtopia_request) {
-        res.sendStatus(404);
-        return;
-    }
-    else if (cnf.server.logs.request)
-        print.info(`[${req.ip}] Request to: ${req.url}`);
-
     res.send('<script>window.close();</script>');
 });
 
 // Cache Section
 web.get("/cache/*", (req, res) => {
-    if (!allowed.host.includes(req.headers.host) && cnf.server.security.only_growtopia_request) {
-        res.sendStatus(404);
-        return;
-    }
-    else if (cnf.server.logs.request)
-        print.info(`[${req.ip}] Request to: ${req.url}`);
-
     try {
         if (fs.existsSync(path.resolve(__dirname, "../../website"+req.url))) {
             print.error(`[${req.ip}] Missing RTTEX: ${req.url}`);

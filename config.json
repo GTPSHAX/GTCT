@@ -3,9 +3,9 @@
         "auto_redirect": "https://ubistatic-a.akamaihd.net/0098/83407701",
         "redirect": [
             {
-                "ClientIP": "",
+                "ClientIP": "103.51.205.106",
                 "ENetIP": "auto",
-                "ENetPort": ""
+                "ENetPort": "6666"
             }
         ]
     },
