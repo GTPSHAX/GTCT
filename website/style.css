@@ -15,7 +15,7 @@ form {
 }
 img {
     width: 70vw;
-    animation: nim ease-in-out 5s infinite;
+    animation: nim ease-in-out 3s infinite;
     opacity: 0;
     image-rendering: optimizeSpeed;
 }

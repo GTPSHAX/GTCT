@@ -1,6 +1,13 @@
 {
     "addon": {
-        "auto_redirect": "https://ubistatic-a.akamaihd.net/0098/83407701"
+        "auto_redirect": "https://ubistatic-a.akamaihd.net/0098/83407701",
+        "redirect": [
+            {
+                "ClientIP": "",
+                "ENetIP": "auto",
+                "ENetPort": ""
+            }
+        ]
     },
     "server": {
         "ports": [[443, "HTTPS"],[80, "HTTP"]],

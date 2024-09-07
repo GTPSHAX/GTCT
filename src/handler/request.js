@@ -5,11 +5,7 @@ const print = require("../plugins/print");
 const axios = require("axios");
 const path = require("path");
 const bodyParser = require('body-parser');
-const pros = require("../process");
-let cache;
-(async()=>{
-    cache = await pros.readCache();
-})();
+const fs = require("fs");
 const allowed = {
     host: ["www.growtopia1.com", "www.growtopia2.com", "growtopia1.com", "growtopia2.com"]
 };
@@ -64,6 +60,13 @@ web.post('/player/login/dashboard', (req, res) => {
     }
 });
 web.get("/public/*", (req, res)=>{
+    if (!allowed.host.includes(req.headers.host) && cnf.server.security.only_growtopia_request) {
+        res.sendStatus(404);
+        return;
+    }
+    else if (cnf.server.logs.request)
+        print.info(`[${req.ip}] Request to: ${req.url}`);
+    
     try {
         res.sendFile(path.resolve(__dirname, "../../website/"+req.url.split("public/")[1]));
     } catch (error) {
@@ -72,6 +75,13 @@ web.get("/public/*", (req, res)=>{
     }
 })
 web.post('/player/growid/login/validate', (req, res) => {
+    if (!allowed.host.includes(req.headers.host) && cnf.server.security.only_growtopia_request) {
+        res.sendStatus(404);
+        return;
+    }
+    else if (cnf.server.logs.request)
+        print.info(`[${req.ip}] Request to: ${req.url}`);
+
     try {
         const token = Buffer.from(
             `_token=${req.body._token}&growId=GROWPLUS&password=GROWPLUS`,
@@ -86,21 +96,33 @@ web.post('/player/growid/login/validate', (req, res) => {
     }
 });
 web.post('/player/validate/close', function (req, res) {
+    if (!allowed.host.includes(req.headers.host) && cnf.server.security.only_growtopia_request) {
+        res.sendStatus(404);
+        return;
+    }
+    else if (cnf.server.logs.request)
+        print.info(`[${req.ip}] Request to: ${req.url}`);
+
     res.send('<script>window.close();</script>');
 });
 
 // Cache Section
 web.get("/cache/*", (req, res) => {
+    if (!allowed.host.includes(req.headers.host) && cnf.server.security.only_growtopia_request) {
+        res.sendStatus(404);
+        return;
+    }
+    else if (cnf.server.logs.request)
+        print.info(`[${req.ip}] Request to: ${req.url}`);
+
     try {
-        const data = cache[req.url];
-        if (!data) {
+        if (fs.existsSync(path.resolve(__dirname, "../../website"+req.url))) {
             print.error(`[${req.ip}] Missing RTTEX: ${req.url}`);
             if (cnf.addon.auto_redirect) res.redirect(cnf.addon.auto_redirect + req.url);
             else res.sendStatus(404);
             return;
         }
         if (cnf.server.logs.sending_rttex) print.info(`[${req.ip}] Sending RTTEX: ${req.url}`);
-        //res.send(data.content);
         res.sendFile(path.resolve(__dirname, "../../website"+req.url))
     } catch (error) {
         print.error(error);
