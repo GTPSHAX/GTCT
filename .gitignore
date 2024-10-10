@@ -1,3 +1,4 @@
 node_modules
-website/cache/*
+cache/*
+!cache/put-your-cache.rttex
 .vercel

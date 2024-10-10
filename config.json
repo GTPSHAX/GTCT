@@ -3,7 +3,7 @@
         "auto_redirect": "https://ubistatic-a.akamaihd.net/0098/83407701",
         "redirect": [
             {
-                "ClientIP": "103.51.205.106",
+                "ClientIP": "",
                 "ENetIP": "auto",
                 "ENetPort": "6666"
             }
@@ -18,13 +18,18 @@
             "sending_rttex": true
         },
         "security": {
-            "only_growtopia_request": true
+            "only_growtopia_request": true,
+            "reset_time": 1000,
+            "reset_blocked_time": 5400000,
+            "max_warn": 10,
+            "limit_req": 100,
+            "min_request_interval": 50
         },
         "server_data": {
             "ip": "auto",
-            "port": 5555,
+            "port": 17091,
             "type": 1,
-            "loginUrl": "gtps.pw",
+            "loginUrl": "www.gtps.pw",
             "maint": "Failed login, please contact discord Alukard A.K.A GTPSHAX",
             "meta": "GrowPlus",
             "beta": {
@@ -43,8 +48,5 @@
                 "type": 1
             }
         }
-    },
-    "path": {
-        "cache": "./website/cache"
     }
 }

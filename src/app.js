@@ -2,7 +2,7 @@ const https = require('https'), http = require("http");
 const fs = require("fs");
 
 const print = require("./plugins/print");
-print.msg("Growtopia Cache Transfer (GTCT) © GrowPlus Community - 2024");
+print.msg("Growtopia Cache Transfer (GTCT) © GrowPlus Community");
 
 print.info("Loading config...");
 const cnf = require("../config.json");

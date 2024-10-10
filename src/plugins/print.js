@@ -1,3 +1,5 @@
+const { security } = require("../process");
+
 const print = {
     info(msg) {
         console.log(`[\x1b[34mINFO\x1b[0m] ${msg}`);
@@ -13,6 +15,9 @@ const print = {
     },
     msg(msg) {
         console.log(`[\x1b[33mMESSAGE\x1b[0m] ${msg}`);
+    },
+    security(msg) {
+        console.log(`[\x1b[33mSECURITY\x1b[0m] ${msg}`);
     }
 };
 

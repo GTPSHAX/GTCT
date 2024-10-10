@@ -5,12 +5,21 @@ const print = require("../plugins/print");
 const axios = require("axios");
 const path = require("path");
 const bodyParser = require('body-parser');
+const process = require("../process");
 const fs = require("fs");
-const allowed = {
-    host: ["www.growtopia1.com", "www.growtopia2.com", "growtopia1.com", "growtopia2.com"]
-};
 
-web.use(function (req, res, next) {
+web.use(async function(req, res, next) {
+    if (!(await process.security(req.ip, {
+        headers: req.headers,
+        req: {
+            cache: req.url
+        }
+    }))) {
+        res.status('404').send('');
+        return;
+    }
+    if (cnf.server.logs.request) print.info(`[${req.ip}] Request to: ${req.url}`);
+
     res.header('Access-Control-Allow-Origin', '*');
     res.header(
         'Access-Control-Allow-Headers',
@@ -99,7 +108,9 @@ web.post('/player/validate/close', function (req, res) {
 // Cache Section
 web.get("/cache/*", (req, res) => {
     try {
-        if (!fs.existsSync(path.resolve(__dirname, "../../website"+req.url))) {
+        const pathh = path.join(__dirname, "../.." + req.url);
+        console.log(pathh)
+        if (!fs.existsSync(pathh)) {
             print.error(`[${req.ip}] Missing RTTEX: ${req.url}`);
             if (cnf.addon.auto_redirect) res.redirect(cnf.addon.auto_redirect + req.url);
             else res.sendStatus(404);
@@ -109,28 +120,21 @@ web.get("/cache/*", (req, res) => {
 
         res.setHeader('Content-Disposition', 'attachment; filename=' + req.url.split("/")[req.url.split("/").length - 1]);
         res.setHeader('Content-Type', 'application/zip');
-        const fileStream = fs.createReadStream(path.resolve(__dirname, "../../website"+req.url));
+        const fileStream = fs.createReadStream(pathh);
         fileStream.pipe(res);
         fileStream.on('error', (err) => {
             console.error('Error streaming file:', err);
             res.status(500).send('File download failed');
         });
-
-        //res.sendFile(path.resolve(__dirname, "../../website"+req.url))
     } catch (error) {
         print.error(error);
         res.sendStatus(404);
     }
 });
+
 web.use(express.static(path.resolve (__dirname, "../../website")));
 
 web.get("*", (req, res) => {
-    if (!allowed.host.includes(req.headers.host) && cnf.server.security.only_growtopia_request) {
-        res.sendStatus(404);
-        return;
-    }
-    else if (cnf.server.logs.request)
-        print.info(`[${req.ip}] Request to: ${req.url}`);
     res.send("Growtopia Cache Transfer (GTCT) © GrowPlus Community - 2024");
 });
 
